@@ -82,11 +82,13 @@ class InferWindow(QMainWindow, Ui_MainWindow):
         self.last.clicked.connect(lambda: (self.button.on_last(),
                                            self.inferer.infer_button_state(),
                                            self.inferer.show_infer(),
-                                           self.file_selecter.show_dir()))
+                                           self.file_selecter.show_dir()
+                                           ))
         self.next.clicked.connect(lambda: (self.button.on_next(),
                                            self.inferer.infer_button_state(),
                                            self.inferer.show_infer(),
-                                           self.file_selecter.show_dir()))
+                                           self.file_selecter.show_dir()
+                                           ))
         # 推理按钮
         self.infer.clicked.connect(self.inferer.infer_button)
         self.global_infer.clicked.connect(lambda: (self.inferer.global_infer_button(),

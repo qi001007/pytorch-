@@ -1,6 +1,5 @@
 from pathlib import Path
 
-from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QFileDialog, QWidget, QSizePolicy
 
 from globals import MW
