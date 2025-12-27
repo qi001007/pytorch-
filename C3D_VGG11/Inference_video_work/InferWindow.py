@@ -26,12 +26,11 @@ class InferWindow(QMainWindow, Ui_MainWindow):
         MW.clip_num = clip_num
         MW.FILE_FIELDS = ['file_dir', 'model_dir', 'data_label_dir', 'wts_dir']
         MW.DIR_FIELDS = ['data_dir']
-        self.PARAMS_MAP = {'model_dir': Path(),
-                           'file_dir': Path(),
-                           'data_dir': Path(),
-                           'data_label_dir': Path(),
-                           'wts_dir': Path()}
-        MW.PARAMS_MAP = self.PARAMS_MAP
+        MW.PARAMS_MAP = {'model_dir': Path(),
+                         'wts_dir': Path(),
+                         'file_dir': Path(),
+                         'data_dir': Path(),
+                         'data_label_dir': Path()}
         self.startEvent()
 
         # 接收Ui_MainWindow控件
@@ -62,11 +61,10 @@ class InferWindow(QMainWindow, Ui_MainWindow):
         self.player = ImageGet()  # 传 QLabel 给它
         MW.player = self.player
         # 连接定时器
-        self.timer.timeout.connect(self.player.play_video_frame)   # type: ignore
+        MW.timer.timeout.connect(self.player.play_video_frame)   # type: ignore
         # 按钮链接函数工具
         self.button = ButtonConnect(parent=self)
         MW.button = self.button
-        MW.list_dir = self.button.list_dir
 
         # 按钮
         # 定义需要长按功能按键(注意：连发间隔 ＞ 防抖定时器时长)
@@ -102,7 +100,7 @@ class InferWindow(QMainWindow, Ui_MainWindow):
 
         # 输入框
         # self.model_path.editingFinished.connect(lambda: self.file_selecter.get_dir('model_dir'))
-        self.file_path.editingFinished.connect(lambda: self.file_selecter.get_dir('file_dir'))
+        self.file_path.editingFinished.connect(lambda: self.file_selecter.get_dir('file_dir', editing=True))
 
     def startEvent(self):
         def pick_file(owner, title="选择文件", start_dir="", filters="所有文件 (*.*)"):
@@ -119,7 +117,7 @@ class InferWindow(QMainWindow, Ui_MainWindow):
             )
             return Path(path) if path else Path()
 
-        for key, path_obj in self.PARAMS_MAP.items():
+        for key, path_obj in MW.PARAMS_MAP.items():
             if not path_obj or path_obj == Path():  # 空路径
                 # 根据字段类型决定是选择文件还是目录
                 if key in MW.FILE_FIELDS:
@@ -134,9 +132,9 @@ class InferWindow(QMainWindow, Ui_MainWindow):
                     print(new_path)
 
                 if new_path and new_path.exists():  # 用户确实选了
-                    self.PARAMS_MAP[key] = new_path
+                    MW.PARAMS_MAP[key] = new_path
                 else:  # 取消
-                    self.PARAMS_MAP[key] = Path()
+                    MW.PARAMS_MAP[key] = Path()
 
     def resizeEvent(self, event):
         """窗口大小改变时重新调整视频帧大小"""

@@ -13,7 +13,7 @@ class ButtonConnect(QObject):
         self._skip_timer.setSingleShot(True)
         self._skip_timer.timeout.connect(lambda: None)  # 占位，后面重连
 
-        self.list_dir = 0
+        MW.list_dir = 0
         self.video_path_list = MW.video_path_list
         self.current_video_dir = self.video_path_list[0]
 
@@ -36,7 +36,7 @@ class ButtonConnect(QObject):
     def switch_video(self, index: int):
         """公共换视频接口：停播 → 换文件 → 回到第一帧 → 继续播"""
         MW.timer.stop()
-        self.list_dir = index
+        MW.list_dir = index
         self.current_video_dir = self.video_path_list[index]
         # 让 ImageGet 重新 open 新视频
         MW.player.start_video(self.current_video_dir)  # 内部会重新 cv2.VideoCapture
@@ -50,7 +50,7 @@ class ButtonConnect(QObject):
     def on_last(self):
         self._skip_timer.stop()          # 连续点/按住时重置
         self._skip_timer.timeout.disconnect()  # 清掉旧槽
-        self._skip_timer.start(80)      # 100 ms 内只切一次
+        self._skip_timer.start(80)      # 80 ms 内只切一次
         self._skip_timer.timeout.connect(lambda: self._switch_debounced(-1))
 
     def on_next(self):

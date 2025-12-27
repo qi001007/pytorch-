@@ -14,7 +14,7 @@ class ImageGet:
         # 允许QLabel缩放内容(使视频随缩放可动)
         self.image.setScaledContents(True)
         # 启动视频
-        self.start_video(MW.PARAMS_MAP['file_dir'])  # 替换为你的视频文件路径
+        self.start_video(MW.video_path_list[0])  # 替换为你的视频文件路径
 
     def aspect_ratio_preserving(self, frame):
         # 获取QLabel的当前大小
@@ -29,7 +29,7 @@ class ImageGet:
 
     def start_video(self, video_path):
         # 初始打印
-        MW.inferer.show_infer(),
+        MW.inferer.show_infer()
         MW.file_selecter.show_dir()
         """开始播放视频"""
         self.video_cap = cv2.VideoCapture(video_path)
@@ -49,6 +49,7 @@ class ImageGet:
         current_frame_num = int(self.video_cap.get(cv2.CAP_PROP_POS_FRAMES))
         # 推理
         MW.inferer.infer(ret, frame, current_frame_num)
+        MW.show_infer()
         if ret:
             # 将BGR转换为RGB
             self.current_frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
